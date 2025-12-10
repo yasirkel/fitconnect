@@ -1,15 +1,22 @@
-<h1>Clubs</h1>
+<h1 class="text-2xl font-bold mb-4">Clubs</h1>
 
 <div *ngIf="loading">Loading clubs...</div>
 
-<div *ngIf="!loading && error">
+<div *ngIf="!loading && error" class="text-red-500">
   {{ error }}
 </div>
 
 <ul *ngIf="!loading && !error && clubs.length">
-  <li *ngFor="let club of clubs" style="margin-bottom: 1rem;">
+  <li *ngFor="let club of clubs" class="mb-4 p-3 border rounded">
     <strong>{{ club.name }}</strong> – {{ club.city }}<br />
     <small>Sports: {{ club.sportsOffered.join(', ') }}</small>
+    <br />
+    <a
+      [routerLink]="['/clubs', club.id]"
+      class="text-blue-600 underline"
+    >
+      View details
+    </a>
   </li>
 </ul>
 

@@ -1,0 +1,37 @@
+<a routerLink="/clubs">&larr; Back to clubs</a>
+
+<div *ngIf="loading">Loading club details...</div>
+
+<div *ngIf="!loading && error">
+  {{ error }}
+</div>
+
+<div *ngIf="!loading && !error && club">
+  <h1 class="text-2xl font-bold mb-2">
+    {{ club.name }}
+  </h1>
+
+  <p class="mb-2">
+    <strong>City:</strong> {{ club.city }}
+  </p>
+
+  <p class="mb-2" *ngIf="club.description">
+    <strong>Description:</strong> {{ club.description }}
+  </p>
+
+  <p class="mb-2">
+    <strong>Address:</strong> {{ club.address }}
+  </p>
+
+  <p class="mb-2">
+    <strong>Sports offered:</strong>
+    <span *ngIf="club.sportsOffered?.length; else noSports">
+      {{ club.sportsOffered.join(', ') }}
+    </span>
+    <ng-template #noSports>Not specified</ng-template>
+  </p>
+</div>
+
+<div *ngIf="!loading && !error && !club">
+  Club not found.
+</div>

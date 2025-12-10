@@ -1,13 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { NgIf, NgFor } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { ClubsService, Club } from '../../services/clubs';
 
 @Component({
   selector: 'app-clubs',
   standalone: true,
-  imports: [NgIf, NgFor],
+  imports: [NgIf, NgFor, RouterModule],
   templateUrl: './clubs.component.html',
-  styleUrl: './clubs.component.css'
+  styleUrls: ['./clubs.component.css']
 })
 
 export class ClubsComponent implements OnInit {
