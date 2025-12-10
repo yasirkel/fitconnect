@@ -2,6 +2,9 @@
 
 <div *ngIf="loading">Loading clubs...</div>
 
+<a routerLink="/clubs/create">+ Create new club</a>
+<br /><br />
+
 <div *ngIf="!loading && error" class="text-red-500">
   {{ error }}
 </div>

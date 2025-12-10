@@ -10,23 +10,8 @@ import {
 } from '@nestjs/common';
 import { ClubsService } from './clubs.service';
 import { Club } from './club.model';
-
-class CreateClubDto {
-  name: string;
-  address: string;
-  city: string;
-  description?: string;
-  sportsOffered: string[];
-  ownerId: string;
-}
-
-class UpdateClubDto {
-  name?: string;
-  address?: string;
-  city?: string;
-  description?: string;
-  sportsOffered?: string[];
-}
+import { CreateClubDto } from './create-club.dto';
+import { UpdateClubDto } from './update-club.dto';
 
 @Controller('clubs')
 export class ClubsController {

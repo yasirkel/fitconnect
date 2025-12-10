@@ -1,24 +1,28 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
-import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // CORS zodat Angular mag praten met de API
+  app.enableCors({
+    origin: 'http://localhost:4200',
+  });
+
+  // validatie op basis van DTO's
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,            // extra velden worden weggehaald
+      forbidNonWhitelisted: true, // fout als iemand onbekende velden stuurt
+      transform: true,            // automatisch omzetten naar juiste types
+    }),
+  );
+
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-  // Allow requests from the frontend dev server (CORS) during development
-  app.enableCors();
-  // Default to 3333 in local development to avoid conflicts with other local services
   const port = process.env.PORT || 3333;
   await app.listen(port);
-  Logger.log(
-    `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
-  );
+  console.log(`Listening at http://localhost:${port}/${globalPrefix}`);
 }
-
 bootstrap();

@@ -1,0 +1,77 @@
+<h1>Create new club</h1>
+
+<a routerLink="/clubs">&larr; Back to clubs</a>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" style="margin-top: 1rem;">
+  <div>
+    <label>
+      Name:
+      <input type="text" formControlName="name" />
+    </label>
+    <div *ngIf="form.controls.name.touched && form.controls.name.invalid">
+      Name is required.
+    </div>
+  </div>
+
+  <div>
+    <label>
+      Address:
+      <input type="text" formControlName="address" />
+    </label>
+    <div *ngIf="form.controls.address.touched && form.controls.address.invalid">
+      Address is required.
+    </div>
+  </div>
+
+  <div>
+    <label>
+      City:
+      <input type="text" formControlName="city" />
+    </label>
+    <div *ngIf="form.controls.city.touched && form.controls.city.invalid">
+      City is required.
+    </div>
+  </div>
+
+  <div>
+    <label>
+      Description:
+      <textarea formControlName="description"></textarea>
+    </label>
+  </div>
+
+  <div>
+    <label>
+      Sports offered (comma separated):
+      <input type="text" formControlName="sportsOffered" />
+    </label>
+    <div
+      *ngIf="
+        form.controls.sportsOffered.touched &&
+        form.controls.sportsOffered.invalid
+      "
+    >
+      At least one sport is required.
+    </div>
+  </div>
+
+  <div>
+    <label>
+      Owner ID:
+      <input type="text" formControlName="ownerId" />
+    </label>
+    <div
+      *ngIf="form.controls.ownerId.touched && form.controls.ownerId.invalid"
+    >
+      Owner ID is required.
+    </div>
+  </div>
+
+  <div *ngIf="error" style="color: red; margin-top: 0.5rem;">
+    {{ error }}
+  </div>
+
+  <button type="submit" [disabled]="loading">
+    {{ loading ? 'Creating...' : 'Create club' }}
+  </button>
+</form>

@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { Club } from './club.model';
+import { CreateClubDto } from './create-club.dto';
+import { UpdateClubDto } from './update-club.dto';
 
 @Injectable()
 export class ClubsService {
@@ -25,24 +27,24 @@ export class ClubsService {
     return this.clubs.find((c) => c.id === id);
   }
 
-  create(data: Omit<Club, 'id' | 'createdAt'>): Club {
+  create(data: CreateClubDto): Club {
     const newClub: Club = {
+      ...data,
       id: randomUUID(),
       createdAt: new Date(),
-      ...data,
     };
     this.clubs.push(newClub);
     return newClub;
   }
 
-  update(
-    id: string,
-    changes: Partial<Omit<Club, 'id' | 'createdAt'>>
-  ): Club | undefined {
-    const idx = this.clubs.findIndex((c) => c.id === id);
-    if (idx === -1) return undefined;
-    this.clubs[idx] = { ...this.clubs[idx], ...changes };
-    return this.clubs[idx];
+  update(id: string, changes: UpdateClubDto ): Club | undefined {
+    const index = this.clubs.findIndex((club) => club.id === id);
+    if (index === -1) return undefined;
+
+    const existing = this.clubs[index];
+    const updated: Club = { ...existing, ...changes };
+    this.clubs[index] = updated;
+    return updated;
   }
 
   remove(id: string): boolean {
