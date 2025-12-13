@@ -30,8 +30,14 @@
     </span>
     <ng-template #noSports>Not specified</ng-template>
   </p>
-</div>
 
+  <div style="margin: 1rem 0;">
+    <a [routerLink]="['/clubs', club.id, 'edit']">Edit club</a>
+    &nbsp; | &nbsp;
+    <button (click)="onDelete()" [disabled]="deleting">
+      {{ deleting ? 'Deleting...' : 'Delete club' }}
+    </button>
+  </div>
 <div *ngIf="!loading && !error && !club">
   Club not found.
 </div>
