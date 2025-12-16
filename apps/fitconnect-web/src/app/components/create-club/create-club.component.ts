@@ -67,10 +67,10 @@ export class CreateClubComponent {
           this.router.navigate(['/clubs']);
         },
         error: (err) => {
-          console.error('Error creating club', err);
-          this.error = 'Failed to create club';
-          this.loading = false;
-        },
+            console.error('Error creating club', err);
+            this.error = 'Failed to create club';
+            this.loading = false;
+          },
       });
   }
 }

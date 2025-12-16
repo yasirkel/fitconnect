@@ -40,7 +40,7 @@ export class EditClubComponent implements OnInit {
   ngOnInit(): void {
     // ID uit de URL halen
     const id = this.route.snapshot.paramMap.get('id');
-    if (!id) {
+    if (!id || id === 'undefined') {
       this.error = 'No club id provided in URL';
       this.loading = false;
       return;

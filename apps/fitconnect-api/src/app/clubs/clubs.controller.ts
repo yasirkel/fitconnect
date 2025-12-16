@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { ClubsService } from './clubs.service';
 import { Club } from './club.model';
+import { ClubDocument } from './club.schema';
 import { CreateClubDto } from './create-club.dto';
 import { UpdateClubDto } from './update-club.dto';
 
@@ -18,13 +19,13 @@ export class ClubsController {
   constructor(private readonly clubsService: ClubsService) {}
 
   @Get()
-  getAll(): Club[] {
+  async getAll(): Promise<ClubDocument[]> {
     return this.clubsService.findAll();
   }
 
   @Get(':id')
-  getOne(@Param('id') id: string): Club {
-    const club = this.clubsService.findOne(id);
+  async getOne(@Param('id') id: string): Promise<ClubDocument> {
+    const club = await this.clubsService.findOne(id);
     if (!club) {
       throw new NotFoundException(`Club with id ${id} not found`);
     }
@@ -32,13 +33,16 @@ export class ClubsController {
   }
 
   @Post()
-  create(@Body() body: CreateClubDto): Club {
+  async create(@Body() body: CreateClubDto): Promise<ClubDocument> {
     return this.clubsService.create(body);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() body: UpdateClubDto): Club {
-    const updated = this.clubsService.update(id, body);
+  async update(
+    @Param('id') id: string,
+    @Body() body: UpdateClubDto
+  ): Promise<ClubDocument> {
+    const updated = await this.clubsService.update(id, body);
     if (!updated) {
       throw new NotFoundException(`Club with id ${id} not found`);
     }
@@ -46,11 +50,8 @@ export class ClubsController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string): { success: boolean } {
-    const success = this.clubsService.remove(id);
-    if (!success) {
-      throw new NotFoundException(`Club with id ${id} not found`);
-    }
-    return { success };
+  async remove(@Param('id') id: string): Promise<{ success: boolean }> {
+    await this.clubsService.remove(id);
+    return { success: true };
   }
 }

@@ -1,55 +1,43 @@
-import { Injectable } from '@nestjs/common';
-import { randomUUID } from 'crypto';
-import { Club } from './club.model';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+
+import { ClubDocument } from './club.schema';
 import { CreateClubDto } from './create-club.dto';
 import { UpdateClubDto } from './update-club.dto';
 
 @Injectable()
 export class ClubsService {
-  private clubs: Club[] = [
-    {
-      id: randomUUID(),
-      name: 'FitCenter Breda',
-      address: 'Stationsstraat 10',
-      city: 'Breda',
-      description: 'Moderne gym met groepslessen',
-      sportsOffered: ['fitness', 'yoga'],
-      ownerId: 'owner-1',
-      createdAt: new Date(),
-    },
-  ];
+  constructor(
+    @InjectModel(ClubDocument.name) private readonly clubModel: Model<ClubDocument>
+  ) {}
 
-  findAll(): Club[] {
-    return this.clubs;
+  async findAll(): Promise<ClubDocument[]> {
+    return this.clubModel.find().exec();
   }
 
-  findOne(id: string): Club | undefined {
-    return this.clubs.find((c) => c.id === id);
+  async findOne(id: string): Promise<ClubDocument> {
+    const club = await this.clubModel.findById(id).exec();
+    if (!club) throw new NotFoundException(`Club ${id} not found`);
+    return club;
   }
 
-  create(data: CreateClubDto): Club {
-    const newClub: Club = {
-      ...data,
-      id: randomUUID(),
-      createdAt: new Date(),
-    };
-    this.clubs.push(newClub);
-    return newClub;
+  async create(data: CreateClubDto): Promise<ClubDocument> {
+    const created = await this.clubModel.create(data);
+    return created;
   }
 
-  update(id: string, changes: UpdateClubDto ): Club | undefined {
-    const index = this.clubs.findIndex((club) => club.id === id);
-    if (index === -1) return undefined;
+  async update(id: string, changes: UpdateClubDto): Promise<ClubDocument> {
+    const updated = await this.clubModel
+      .findByIdAndUpdate(id, changes, { new: true })
+      .exec();
 
-    const existing = this.clubs[index];
-    const updated: Club = { ...existing, ...changes };
-    this.clubs[index] = updated;
+    if (!updated) throw new NotFoundException(`Club ${id} not found`);
     return updated;
   }
 
-  remove(id: string): boolean {
-    const before = this.clubs.length;
-    this.clubs = this.clubs.filter((c) => c.id !== id);
-    return this.clubs.length < before;
+  async remove(id: string): Promise<void> {
+    const res = await this.clubModel.findByIdAndDelete(id).exec();
+    if (!res) throw new NotFoundException(`Club ${id} not found`);
   }
 }

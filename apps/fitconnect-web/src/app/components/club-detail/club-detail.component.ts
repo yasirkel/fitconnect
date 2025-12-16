@@ -27,7 +27,7 @@ export class ClubDetailComponent implements OnInit {
     // Lees het :id deel uit de URL
     const id = this.route.snapshot.paramMap.get('id');
 
-    if (!id) {
+    if (!id || id === 'undefined') {
       this.error = 'No club id provided in URL';
       this.loading = false;
       return;
