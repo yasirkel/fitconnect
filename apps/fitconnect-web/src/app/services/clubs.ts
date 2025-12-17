@@ -3,6 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { Training } from '../components/club-detail/training.model';
+
+
 export interface Club {
 	id: string;
 	name: string;
@@ -57,6 +60,11 @@ export class ClubsService {
 		);
 	}
 
+	getTrainingsByClubId(clubId: string) {
+  	return this.http.get<Training[]>(`${this.apiUrl}/${clubId}/trainings`
+  );
+}
+
 }
 
 function normalizeClub(c: any): Club {
@@ -71,4 +79,6 @@ function normalizeClub(c: any): Club {
 		createdAt: c.createdAt ? new Date(c.createdAt).toISOString() : ''
 	} as Club;
 }
+
+
 

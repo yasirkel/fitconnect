@@ -1,4 +1,5 @@
-<a routerLink="/clubs">&larr; Back to clubs</a>
+<a routerLink="/clubs">&larr; Back to clubs</a> <br>
+
 
 <div *ngIf="loading">Loading club details...</div>
 
@@ -41,3 +42,25 @@
 <div *ngIf="!loading && !error && !club">
   Club not found.
 </div>
+
+<!-- Trainings section -->
+<h2>Trainings</h2> <a *ngIf="club" [routerLink]="['/trainings/create']" [queryParams]="{ clubId: club.id }"> + Add training</a>
+
+<p *ngIf="trainingsLoading">Trainings laden...</p>
+<p *ngIf="trainingsError">{{ trainingsError }}</p>
+
+<ul *ngIf="!trainingsLoading && !trainingsError && trainings.length > 0">
+  <li *ngFor="let t of trainings">
+
+    <strong>{{ t.title }}</strong><br />
+    {{ t.startTime | date:'short' }} · {{ t.durationMinutes }} min · max {{ t.capacity }}
+    <br />
+    <a [routerLink]="['/trainings', t.id]">View </a> 
+    <a [routerLink]="['/trainings', t.id, 'edit']"> Edit</a>
+  </li>
+</ul>
+
+<p *ngIf="!trainingsLoading && !trainingsError && trainings.length === 0">
+  Nog geen trainingen voor deze club.
+</p>
+

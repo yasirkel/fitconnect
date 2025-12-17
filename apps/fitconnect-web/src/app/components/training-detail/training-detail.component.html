@@ -1,0 +1,32 @@
+<a *ngIf="training" [routerLink]="['/clubs', training.clubId]">&larr; Back to club</a>
+
+<div *ngIf="loading">Loading training...</div>
+<p *ngIf="error">{{ error }}</p>
+
+<div *ngIf="!loading && training">
+  <h1>{{ training.title }}</h1>
+
+  <p *ngIf="training.description">
+    <strong>Description:</strong> {{ training.description }}
+  </p>
+
+  <p>
+    <strong>Start:</strong> {{ training.startTime | date:'short' }}
+  </p>
+
+  <p>
+    <strong>Duration:</strong> {{ training.durationMinutes }} min
+  </p>
+
+  <p>
+    <strong>Capacity:</strong> {{ training.capacity }}
+  </p>
+
+  <div>
+    <a [routerLink]="['/trainings', training.id, 'edit']">Edit</a>
+    &nbsp; | &nbsp;
+    <button (click)="onDelete()" [disabled]="deleting">
+      {{ deleting ? 'Deleting...' : 'Delete' }}
+    </button>
+  </div>
+</div>

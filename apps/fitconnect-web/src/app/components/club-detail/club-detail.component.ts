@@ -3,12 +3,17 @@ import { NgIf, NgFor } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ClubsService, Club } from '../../services/clubs';
 import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
+
+
+import { Training } from './training.model';
+
 
 
 @Component({
   selector: 'app-club-detail',
   standalone: true,
-  imports: [NgIf, NgFor, RouterLink],
+  imports: [NgIf, NgFor, RouterLink, DatePipe],
   templateUrl: './club-detail.component.html',
   styleUrls: ['./club-detail.component.css'],
 })
@@ -23,6 +28,11 @@ export class ClubDetailComponent implements OnInit {
   error: string | null = null;
   deleting = false;
 
+  trainings: Training[] = [];
+  trainingsLoading = true;
+  trainingsError: string | null = null;
+
+
   ngOnInit(): void {
     // Lees het :id deel uit de URL
     const id = this.route.snapshot.paramMap.get('id');
@@ -33,6 +43,20 @@ export class ClubDetailComponent implements OnInit {
       return;
     }
 
+    // Haal de trainingen van deze club op via de service
+    this.clubsService.getTrainingsByClubId(id).subscribe({
+      next: (data) => {
+        this.trainings = data;
+        this.trainingsLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching trainings', err);
+        this.trainingsError = 'Failed to load trainings';
+        this.trainingsLoading = false;
+      },
+    });
+
+    // Haal de club details op via de service
     this.clubsService.getOne(id).subscribe({
       next: (data) => {
         this.club = data;

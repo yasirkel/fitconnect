@@ -1,0 +1,46 @@
+<h1>Create Training</h1>
+
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <input type="hidden" formControlName="clubId" />
+
+  <div>
+    <label for="title">Title</label><br />
+    <input id="title" type="text" formControlName="title" />
+  </div>
+
+  <div>
+    <label for="description">Description</label><br />
+    <textarea id="description" formControlName="description"></textarea>
+  </div>
+
+  <div>
+    <label for="startTime">Start time</label><br />
+    <input
+      id="startTime"
+      type="datetime-local"
+      formControlName="startTime"
+    />
+  </div>
+
+  <div>
+    <label for="durationMinutes">Duration (minutes)</label><br />
+    <input
+      id="durationMinutes"
+      type="number"
+      formControlName="durationMinutes"
+    />
+  </div>
+
+  <div>
+    <label for="capacity">Capacity</label><br />
+    <input
+      id="capacity"
+      type="number"
+      formControlName="capacity"
+    />
+  </div>
+
+  <button type="submit">Create</button>
+</form>
+
+<p *ngIf="error">{{ error }}</p>

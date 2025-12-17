@@ -5,11 +5,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ClubsModule } from './clubs.module';
 
+import { TrainingsModule } from './trainings/trainings.module';
+
 @Module({
   imports: [
     MongooseModule.forRoot(process.env.MONGO_URI ?? 'mongodb://localhost:27017/fitconnect'),
     ClubsModule,
+    TrainingsModule,
   ],
+  
   controllers: [AppController],
   providers: [AppService],
 })

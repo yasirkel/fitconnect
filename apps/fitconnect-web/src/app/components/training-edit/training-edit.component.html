@@ -1,0 +1,36 @@
+<h1>Edit Training</h1>
+
+<div *ngIf="loading">Loading training...</div>
+<p *ngIf="error">{{ error }}</p>
+
+<form *ngIf="!loading" [formGroup]="form" (ngSubmit)="save()">
+  <div>
+    <label for="title">Title</label><br />
+    <input id="title" formControlName="title" />
+  </div>
+
+  <div>
+    <label for="description">Description</label><br />
+    <textarea id="description" formControlName="description"></textarea>
+  </div>
+
+  <div>
+    <label for="startTime">Start time</label><br />
+    <input id="startTime" type="datetime-local" formControlName="startTime" />
+  </div>
+
+  <div>
+    <label for="durationMinutes">Duration (minutes)</label><br />
+    <input id="durationMinutes" type="number" formControlName="durationMinutes" />
+  </div>
+
+  <div>
+    <label for="capacity">Capacity</label><br />
+    <input id="capacity" type="number" formControlName="capacity" />
+  </div>
+
+  <button type="submit">Save</button>
+  <button type="button" (click)="delete()" [disabled]="deleting">
+    {{ deleting ? 'Deleting...' : 'Delete' }}
+  </button>
+</form>
