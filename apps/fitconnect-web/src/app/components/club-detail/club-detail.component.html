@@ -51,12 +51,19 @@
 
 <ul *ngIf="!trainingsLoading && !trainingsError && trainings.length > 0">
   <li *ngFor="let t of trainings">
+    <strong>{{ t.title }}</strong><br/>
+    {{ t.startTime | date:'short' }} · {{ t.durationMinutes }} min · max {{ t.capacity }} ·
+    Enrolled: {{ getEnrolledCount(t.id) }} / {{ t.capacity }}
 
-    <strong>{{ t.title }}</strong><br />
-    {{ t.startTime | date:'short' }} · {{ t.durationMinutes }} min · max {{ t.capacity }}
-    <br />
-    <a [routerLink]="['/trainings', t.id]">View </a> 
-    <a [routerLink]="['/trainings', t.id, 'edit']"> Edit</a>
+    <br/>
+
+    <button *ngIf="!isEnrolled(t.id)" (click)="enroll(t.id)" [disabled]="isFull(t.id, t.capacity)">Enroll</button>
+    <button *ngIf="isEnrolled(t.id)" (click)="unenroll(t.id)">Unenroll</button>
+
+    <br/>
+    
+    <a [routerLink]="['/trainings', t.id]">View</a>
+    <a [routerLink]="['/trainings', t.id, 'edit']">Edit</a>
   </li>
 </ul>
 
