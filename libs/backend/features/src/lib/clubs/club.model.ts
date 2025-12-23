@@ -1,10 +1,10 @@
 export class Club {
-  id: string;
-  name: string;
-  address: string;
-  city: string;
+  id!: string;
+  name!: string;
+  address!: string;
+  city!: string;
   description?: string;
-  sportsOffered: string[];
-  ownerId: string;
-  createdAt: Date;
+  sportsOffered!: string[];
+  ownerId!: string;
+  createdAt!: Date;
 }

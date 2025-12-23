@@ -10,15 +10,15 @@ import {
 export class CreateClubDto {
   @IsString()
   @IsNotEmpty()
-  name: string;
+  name!: string;
 
   @IsString()
   @IsNotEmpty()
-  address: string;
+  address!: string;
 
   @IsString()
   @IsNotEmpty()
-  city: string;
+  city!: string;
 
   @IsOptional()
   @IsString()
@@ -28,9 +28,9 @@ export class CreateClubDto {
   @ArrayNotEmpty()
   @IsString({ each: true })
   @IsDefined()
-  sportsOffered: string[];
+  sportsOffered!: string[];
 
   @IsString()
   @IsNotEmpty()
-  ownerId: string;
+  ownerId!: string;
 }
