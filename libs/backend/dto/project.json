@@ -1,0 +1,9 @@
+{
+  "name": "backend-dto",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/backend/dto/src",
+  "projectType": "library",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project backend-dto --web",
+  "targets": {}
+}

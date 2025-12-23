@@ -1,11 +1,13 @@
 import { Route } from '@angular/router';
-import { ClubsComponent } from './components/clubs/clubs.component';
-import { ClubDetailComponent } from './components/club-detail/club-detail.component';
-import { CreateClubComponent } from './components/create-club/create-club.component';
-import { EditClubComponent } from './components/edit-club/edit-club.component';
-import { TrainingCreateComponent } from './components/training-create/training-create.component';
-import { TrainingEditComponent } from './components/training-edit/training-edit.component';
-import { TrainingDetailComponent } from './components/training-detail/training-detail.component';
+import {
+  ClubsComponent,
+  ClubDetailComponent,
+  CreateClubComponent,
+  EditClubComponent,
+  TrainingCreateComponent,
+  TrainingEditComponent,
+  TrainingDetailComponent,
+} from '@fitconnect/frontend-features';
 
 
 export const appRoutes: Route[] = [

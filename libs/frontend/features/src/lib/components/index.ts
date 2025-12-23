@@ -1,0 +1,7 @@
+export { ClubsComponent } from './clubs/clubs.component';
+export { ClubDetailComponent } from './club-detail/club-detail.component';
+export { CreateClubComponent } from './create-club/create-club.component';
+export { EditClubComponent } from './edit-club/edit-club.component';
+export { TrainingCreateComponent } from './training-create/training-create.component';
+export { TrainingEditComponent } from './training-edit/training-edit.component';
+export { TrainingDetailComponent } from './training-detail/training-detail.component';

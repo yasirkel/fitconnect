@@ -63,7 +63,7 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "fitconnect-api/jest.config.ts",
+        "jestConfig": "apps/fitconnect-api/jest.config.ts",
         "passWithNoTests": true
       }
     }

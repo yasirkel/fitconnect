@@ -14,7 +14,12 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@fitconnect/api": ["libs/shared/api/src/index.ts"],
+      "@fitconnect/dto": ["libs/backend/dto/src/index.ts"],
+      "@fitconnect/features": ["libs/backend/features/src/index.ts"],
+      "@fitconnect/frontend-features": ["libs/frontend/features/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
