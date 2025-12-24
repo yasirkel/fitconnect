@@ -3,7 +3,9 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ClubsModule, TrainingsModule, EnrollmentsModule } from '@fitconnect/features';
+import { ClubsModule, TrainingsModule, EnrollmentsModule, UsersModule, AuthModule  } from '@fitconnect/features';
+
+
 
 @Module({
   imports: [
@@ -11,6 +13,8 @@ import { ClubsModule, TrainingsModule, EnrollmentsModule } from '@fitconnect/fea
     ClubsModule,
     TrainingsModule,
     EnrollmentsModule,
+    UsersModule,
+    AuthModule,
   ],
   
   controllers: [AppController],

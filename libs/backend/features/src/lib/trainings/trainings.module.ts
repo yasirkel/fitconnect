@@ -5,9 +5,16 @@ import { TrainingsController } from './trainings.controller';
 import { TrainingsService } from './trainings.service';
 import { Training, TrainingSchema } from './training.schema';
 
+import { Club, ClubSchema } from '../clubs/club.schema';
+
+
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Training.name, schema: TrainingSchema }]),
+    MongooseModule.forFeature([
+      { name: Training.name, schema: TrainingSchema },
+      { name: Club.name, schema: ClubSchema },
+    ]),
+    
   ],
   controllers: [TrainingsController],
   providers: [TrainingsService],

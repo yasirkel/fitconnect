@@ -1,17 +1,8 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  NotFoundException,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
 import { ClubsService } from './clubs.service';
-import { Club } from './club.model';
 import { ClubDocument } from './club.schema';
 import { CreateClubDto, UpdateClubDto } from '@fitconnect/dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('clubs')
 export class ClubsController {
@@ -24,33 +15,25 @@ export class ClubsController {
 
   @Get(':id')
   async getOne(@Param('id') id: string): Promise<ClubDocument> {
-    const club = await this.clubsService.findOne(id);
-    if (!club) {
-      throw new NotFoundException(`Club with id ${id} not found`);
-    }
-    return club;
+    return this.clubsService.findOne(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() body: CreateClubDto): Promise<ClubDocument> {
-    return this.clubsService.create(body);
+  async create(@Body() body: CreateClubDto, @Req() req: any): Promise<ClubDocument> {
+    return this.clubsService.create(body, req.user.userId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() body: UpdateClubDto
+  async update(@Param('id') id: string, @Body() body: UpdateClubDto, @Req() req: any
   ): Promise<ClubDocument> {
-    const updated = await this.clubsService.update(id, body);
-    if (!updated) {
-      throw new NotFoundException(`Club with id ${id} not found`);
-    }
-    return updated;
+    return this.clubsService.update(id, body, req.user.userId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async remove(@Param('id') id: string): Promise<{ success: boolean }> {
-    await this.clubsService.remove(id);
-    return { success: true };
+  async remove(@Param('id') id: string, @Req() req: any): Promise<{ success: true }> {
+    return this.clubsService.remove(id, req.user.userId);
   }
 }
