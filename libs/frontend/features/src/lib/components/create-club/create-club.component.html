@@ -55,17 +55,7 @@
     </div>
   </div>
 
-  <div>
-    <label>
-      Owner ID:
-      <input type="text" formControlName="ownerId" />
-    </label>
-    <div
-      *ngIf="form.controls.ownerId.touched && form.controls.ownerId.invalid"
-    >
-      Owner ID is required.
-    </div>
-  </div>
+  <!-- Owner ID removed: backend assigns owner based on authenticated user -->
 
   <div *ngIf="error" style="color: red; margin-top: 0.5rem;">
     {{ error }}

@@ -10,6 +10,17 @@ async function bootstrap() {
   // CORS zodat Angular mag praten met de API
   app.enableCors({
     origin: 'http://localhost:4200',
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
+
+  // Log incoming Authorization header for debugging auth issues
+  app.use((req: any, _res: any, next: any) => {
+    try {
+      console.log('Incoming Authorization header:', req.headers?.authorization);
+    } catch (e) {
+      // noop
+    }
+    next();
   });
 
   // validatie op basis van DTO's

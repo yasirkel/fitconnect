@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Club, Training } from '@fitconnect/api';
+import { CreateClubDto } from '@fitconnect/dto';
 
 // Re-export for backward compatibility
 export type { Club };
@@ -27,8 +28,8 @@ export class ClubsService {
 		return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(map(normalizeClub));
 	}
 
-	// Nieuwe club aanmaken (POST)
-	createClub(data: Omit<Club, 'id' | 'createdAt'>): Observable<Club> {
+	// Nieuwe club aanmaken (POST) - use backend CreateClubDto (ownerId derived from JWT)
+	createClub(data: CreateClubDto): Observable<Club> {
 		return this.http
 			.post<any>(this.apiUrl, data)
 			.pipe(map(normalizeClub));
