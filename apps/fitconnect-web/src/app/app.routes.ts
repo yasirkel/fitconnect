@@ -7,6 +7,8 @@ import {
   TrainingCreateComponent,
   TrainingEditComponent,
   TrainingDetailComponent,
+  LoginComponent,
+  RegisterComponent,
 } from '@fitconnect/frontend-features';
 
 
@@ -17,6 +19,11 @@ export const appRoutes: Route[] = [
   { path: 'trainings/create', component: TrainingCreateComponent },
   { path: 'trainings/:id/edit', component: TrainingEditComponent },
   { path: 'trainings/:id', component: TrainingDetailComponent },
+
+  // Auth routes
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+
 
   // Club routes
   { path: 'clubs/create', component: CreateClubComponent },

@@ -1,0 +1,29 @@
+<h1>Register</h1>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="displayName">Display name</label><br />
+    <input id="displayName" type="text" formControlName="displayName" />
+  </div>
+
+  <div>
+    <label for="email">Email</label><br />
+    <input id="email" type="email" formControlName="email" />
+  </div>
+
+  <div>
+    <label for="password">Password</label><br />
+    <input id="password" type="password" formControlName="password" />
+  </div>
+
+  <p *ngIf="error">{{ error }}</p>
+
+  <button type="submit" [disabled]="loading || form.invalid">
+    {{ loading ? 'Creating account...' : 'Register' }}
+  </button>
+</form>
+
+<p>
+  Already have an account?
+  <a routerLink="/login">Login</a>
+</p>

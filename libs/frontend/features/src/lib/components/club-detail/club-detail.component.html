@@ -44,7 +44,8 @@
 </div>
 
 <!-- Trainings section -->
-<h2>Trainings</h2> <a *ngIf="club" [routerLink]="['/trainings/create']" [queryParams]="{ clubId: club.id }"> + Add training</a>
+<h2>Trainings</h2> <a *ngIf="club && isOwner" [routerLink]="['/trainings/create']" [queryParams]="{ clubId: club.id }"> + Add training</a>
+
 
 <p *ngIf="trainingsLoading">Trainings laden...</p>
 <p *ngIf="trainingsError">{{ trainingsError }}</p>
@@ -63,7 +64,7 @@
     <br/>
     
     <a [routerLink]="['/trainings', t.id]">View</a>
-    <a [routerLink]="['/trainings', t.id, 'edit']">Edit</a>
+    <a *ngIf="isOwner" [routerLink]="['/trainings', t.id, 'edit']">Edit</a>
   </li>
 </ul>
 

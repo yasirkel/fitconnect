@@ -3,10 +3,12 @@ import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 
 import { ClubsService } from '../../services/clubs.service';
-import { Training } from './training.model';
+import { Training } from '@fitconnect/api';
 
 import { EnrollmentsService } from '../../services/enrollments.service';
 import { Club, Enrollment } from '@fitconnect/api';
+
+import { AuthService } from '@fitconnect/frontend-features';
 
 @Component({
   selector: 'app-club-detail',
@@ -21,11 +23,16 @@ export class ClubDetailComponent implements OnInit {
   private clubsService = inject(ClubsService);
   private router = inject(Router);
   private enrollmentsService = inject(EnrollmentsService);
+  private authService = inject(AuthService);
 
   club: Club | null = null;
   loading = true;
   error: string | null = null;
   deleting = false;
+
+  meUserId: string | null = null;
+  isOwner = false;
+
 
   trainings: Training[] = [];
   trainingsLoading = true;
@@ -71,6 +78,7 @@ export class ClubDetailComponent implements OnInit {
     this.clubsService.getOne(id).subscribe({
       next: (data) => {
         this.club = data;
+        this.isOwner = !!this.meUserId && this.club.ownerId === this.meUserId;
         this.loading = false;
       },
       error: (err) => {
@@ -79,6 +87,18 @@ export class ClubDetailComponent implements OnInit {
         this.loading = false;
       },
     });
+
+    this.authService.me().subscribe({
+     next: (me) => {
+    this.meUserId = me.userId;
+    this.isOwner = !!this.club && this.club.ownerId === this.meUserId;
+      },
+      error: () => {
+        this.meUserId = null;
+        this.isOwner = false;
+      },
+    });
+
   }
 
   // Enrollments laden voor een training

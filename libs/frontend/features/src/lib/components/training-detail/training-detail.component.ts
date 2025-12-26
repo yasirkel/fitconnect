@@ -4,7 +4,7 @@ import { NgIf } from '@angular/common';
 import { DatePipe } from '@angular/common';
 
 import { TrainingsService } from '../../services/trainings.service';
-import { Training } from '../club-detail/training.model';
+import { Training } from '@fitconnect/api';
 
 @Component({
   selector: 'app-training-detail',

@@ -2,11 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { AuthResponse, MeResponse } from '@fitconnect/api';
+import { BehaviorSubject } from 'rxjs';
+
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly baseUrl = 'http://localhost:3333/api/auth';
   private readonly tokenKey = 'token';
+
+  // Observable om login status bij te houden
+  private readonly _loggedIn$ = new BehaviorSubject<boolean>(this.isLoggedIn());
+  loggedIn$ = this._loggedIn$.asObservable();
+
 
   constructor(private http: HttpClient) {}
 
@@ -28,6 +35,7 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem(this.tokenKey);
+    this._loggedIn$.next(false); // Update login status observable
   }
 
   getToken(): string | null {
@@ -40,5 +48,6 @@ export class AuthService {
 
   private setToken(token: string) {
     localStorage.setItem(this.tokenKey, token);
+    this._loggedIn$.next(true); // Update login status observable
   }
 }

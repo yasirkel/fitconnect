@@ -9,7 +9,7 @@ import { RegisterDto, LoginDto } from '@fitconnect/dto';
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
-    private readonly jwtService: JwtService
+    private readonly jwtService: JwtService,
   ) {}
 
   async register(dto: RegisterDto) {
@@ -46,4 +46,13 @@ export class AuthService {
 
     return { user, token };
   }
+
+  /**
+   * Return information for the given user id.
+   * Caller should supply the id (e.g. from `request.user.sub`).
+   */
+  async me(userId: string) {
+    return this.usersService.findById(userId);
+  }
+
 }
