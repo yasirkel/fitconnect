@@ -18,6 +18,7 @@ export class TrainingCreateComponent implements OnInit {
   private router = inject(Router);
 
   error: string | null = null;
+  loading = false;
   clubId!: string;
 
   form = this.fb.group({
@@ -44,12 +45,20 @@ export class TrainingCreateComponent implements OnInit {
   submit(): void {
     if (this.form.invalid) return;
 
+    this.loading = true;
+
     this.trainingsService.createTraining(this.form.value).subscribe({
       next: () => {
+        this.loading = false;
         this.router.navigate(['/clubs', this.clubId]);
       },
-      error: () => {
-        this.error = 'Failed to create training';
+      error: (err: any) => {
+        const status = err?.status;
+
+        if (status === 401) this.error = 'Je moet ingelogd zijn om een training te maken.';
+        else if (status === 403) this.error = 'Alleen de eigenaar van deze club mag trainingen maken.';
+        else this.error = 'Failed to create training';
+        this.loading = false;
       },
     });
   }

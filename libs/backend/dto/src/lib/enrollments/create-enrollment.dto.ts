@@ -5,7 +5,4 @@ export class CreateEnrollmentDto {
   @IsMongoId()
   trainingId!: string;
 
-  @IsDefined()
-  @IsString()
-  userId!: string;
 }

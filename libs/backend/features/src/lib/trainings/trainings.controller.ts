@@ -1,45 +1,64 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
-import { CreateTrainingDto, UpdateTrainingDto } from '@fitconnect/dto';
-import { TrainingsService } from './trainings.service';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 
-@Controller()
+import { TrainingsService } from './trainings.service';
+import { TrainingDocument } from './training.schema';
+import { CreateTrainingDto, UpdateTrainingDto } from '@fitconnect/dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+
+@Controller('trainings')
 export class TrainingsController {
   constructor(private readonly trainingsService: TrainingsService) {}
 
-  // GET /api/trainings
-  @Get('trainings')
-  findAll() {
+  @Get()
+  async findAll(): Promise<TrainingDocument[]> {
     return this.trainingsService.findAll();
   }
 
-  // GET /api/trainings/:id
-  @Get('trainings/:id')
-  findOne(@Param('id') id: string) {
+  @Get(':id')
+  async findOne(@Param('id') id: string): Promise<TrainingDocument> {
     return this.trainingsService.findOne(id);
   }
 
-  // GET /api/clubs/:clubId/trainings relatie endpoint
-  @Get('clubs/:clubId/trainings')
-  findByClub(@Param('clubId') clubId: string) {
+  @Get('/clubs/:clubId')
+  async findByClub(@Param('clubId') clubId: string): Promise<TrainingDocument[]> {
     return this.trainingsService.findByClubId(clubId);
   }
 
-  // POST /api/trainings
-  @Post('trainings')
-  create(@Body() dto: CreateTrainingDto) {
-    return this.trainingsService.create(dto);
+  @UseGuards(JwtAuthGuard)
+  @Post()
+  async create(
+    @Body() dto: CreateTrainingDto,
+    @Req() req: any,
+  ): Promise<TrainingDocument> {
+    return this.trainingsService.create(dto, req.user.userId);
   }
 
-  // PATCH /api/trainings/:id
-  @Patch('trainings/:id')
-  update(@Param('id') id: string, @Body() dto: UpdateTrainingDto) {
-    return this.trainingsService.update(id, dto);
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() dto: UpdateTrainingDto,
+    @Req() req: any,
+  ): Promise<TrainingDocument> {
+    return this.trainingsService.update(id, dto, req.user.userId);
   }
 
-  // DELETE /api/trainings/:id
-  @Delete('trainings/:id')
-  async remove(@Param('id') id: string) {
-    await this.trainingsService.remove(id);
-    return { success: true };
+  @UseGuards(JwtAuthGuard)
+  @Delete(':id')
+  async remove(
+    @Param('id') id: string,
+    @Req() req: any,
+  ): Promise<{ success: true }> {
+    return this.trainingsService.remove(id, req.user.userId);
   }
 }

@@ -23,7 +23,7 @@
   </p>
 
   <div>
-    <a [routerLink]="['/trainings', training.id, 'edit']">Edit</a>
+    <a *ngIf="loggedIn$ | async" [routerLink]="['/trainings', training.id, 'edit']">Edit</a>
     &nbsp; | &nbsp;
     <button (click)="onDelete()" [disabled]="deleting">
       {{ deleting ? 'Deleting...' : 'Delete' }}

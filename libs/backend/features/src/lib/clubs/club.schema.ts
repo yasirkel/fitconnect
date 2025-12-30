@@ -1,8 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { HydratedDocument, Types } from 'mongoose';
+
+export type ClubDocument = HydratedDocument<Club>;
 
 @Schema({ timestamps: true })
-export class ClubDocument extends Document {
+export class Club {
   @Prop({ required: true })
   name!: string;
 
@@ -22,4 +24,4 @@ export class ClubDocument extends Document {
   ownerId!: string;
 }
 
-export const ClubSchema = SchemaFactory.createForClass(ClubDocument);
+export const ClubSchema = SchemaFactory.createForClass(Club);

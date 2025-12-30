@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { Club, Training } from '@fitconnect/api';
+import { CreateClubDto } from '@fitconnect/dto';
+import { TrainingsService } from '@fitconnect/frontend-features';
 
 // Re-export for backward compatibility
 export type { Club };
@@ -16,6 +18,7 @@ export class ClubsService {
 	// Use explicit port to avoid confusion while developing locally.
 	private apiUrl = 'http://localhost:3333/api/clubs';
 	private http = inject(HttpClient);
+	private trainingsService = inject(TrainingsService);
 
 	getAll(): Observable<Club[]> {
 		return this.http.get<any[]>(this.apiUrl).pipe(
@@ -27,8 +30,8 @@ export class ClubsService {
 		return this.http.get<any>(`${this.apiUrl}/${id}`).pipe(map(normalizeClub));
 	}
 
-	// Nieuwe club aanmaken (POST)
-	createClub(data: Omit<Club, 'id' | 'createdAt'>): Observable<Club> {
+	// Nieuwe club aanmaken (POST) - use backend CreateClubDto (ownerId derived from JWT)
+	createClub(data: CreateClubDto): Observable<Club> {
 		return this.http
 			.post<any>(this.apiUrl, data)
 			.pipe(map(normalizeClub));
@@ -52,9 +55,9 @@ export class ClubsService {
 	}
 
 	getTrainingsByClubId(clubId: string) {
-  	return this.http.get<Training[]>(`${this.apiUrl}/${clubId}/trainings`
-  );
-}
+		// delegate to TrainingsService to avoid duplicating API URL
+		return this.trainingsService.getByClub(clubId);
+	}
 
 }
 

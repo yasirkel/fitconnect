@@ -3,10 +3,12 @@ import { NgIf, NgFor, DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterLink, Router } from '@angular/router';
 
 import { ClubsService } from '../../services/clubs.service';
-import { Training } from './training.model';
+import { Training } from '@fitconnect/api';
 
 import { EnrollmentsService } from '../../services/enrollments.service';
 import { Club, Enrollment } from '@fitconnect/api';
+
+import { AuthService } from '@fitconnect/frontend-features';
 
 @Component({
   selector: 'app-club-detail',
@@ -21,18 +23,24 @@ export class ClubDetailComponent implements OnInit {
   private clubsService = inject(ClubsService);
   private router = inject(Router);
   private enrollmentsService = inject(EnrollmentsService);
+  private authService = inject(AuthService);
 
   club: Club | null = null;
   loading = true;
   error: string | null = null;
   deleting = false;
 
+  meUserId: string | null = null;
+  isOwner = false;
+  loggedIn$ = this.authService.loggedIn$;
+
+
   trainings: Training[] = [];
   trainingsLoading = true;
   trainingsError: string | null = null;
 
-  // tijdelijke “user”
-  userId = 'user-1';
+  // authenticated user id (populated from AuthService)
+  // `meUserId` is set in ngOnInit via `authService.me()`
 
   // enrollment state per training
   enrollmentsByTraining: Record<string, Enrollment[]> = {};
@@ -71,6 +79,7 @@ export class ClubDetailComponent implements OnInit {
     this.clubsService.getOne(id).subscribe({
       next: (data) => {
         this.club = data;
+        this.isOwner = !!this.meUserId && this.club.ownerId === this.meUserId;
         this.loading = false;
       },
       error: (err) => {
@@ -79,6 +88,18 @@ export class ClubDetailComponent implements OnInit {
         this.loading = false;
       },
     });
+
+    this.authService.me().subscribe({
+     next: (me) => {
+    this.meUserId = me.userId;
+    this.isOwner = !!this.club && this.club.ownerId === this.meUserId;
+      },
+      error: () => {
+        this.meUserId = null;
+        this.isOwner = false;
+      },
+    });
+
   }
 
   // Enrollments laden voor een training
@@ -107,7 +128,7 @@ export class ClubDetailComponent implements OnInit {
 
   // Inschrijven voor een training
   enroll(trainingId: string) {
-    this.enrollmentsService.enroll(trainingId, this.userId).subscribe({
+    this.enrollmentsService.enroll(trainingId).subscribe({
       next: () => {
         this.loadEnrollmentsForTraining(trainingId);
       },
@@ -119,8 +140,9 @@ export class ClubDetailComponent implements OnInit {
 
   // Controleren of de user is ingeschreven voor een training
   isEnrolled(trainingId: string): boolean {
+    if (!this.meUserId) return false;
     return (this.enrollmentsByTraining[trainingId] ?? []).some(
-      (e) => e.userId === this.userId
+      (e) => e.userId === this.meUserId
     );
   }
 
@@ -131,21 +153,23 @@ export class ClubDetailComponent implements OnInit {
 
   // Uitschrijven voor een training
   unenroll(trainingId: string) {
-  const enrollment = (this.enrollmentsByTraining[trainingId] ?? []).find(
-    (e) => e.userId === this.userId
-  );
+    if (!this.meUserId) return;
 
-  if (!enrollment) return;
+    const enrollment = (this.enrollmentsByTraining[trainingId] ?? []).find(
+      (e) => e.userId === this.meUserId
+    );
 
-  this.enrollmentsService.remove(enrollment.id).subscribe({
-    next: () => {
-      this.loadEnrollmentsForTraining(trainingId);
-    },
-    error: () => {
-      alert('Failed to unenroll');
-    },
-  });
-}
+    if (!enrollment) return;
+
+    this.enrollmentsService.remove(enrollment.id).subscribe({
+      next: () => {
+        this.loadEnrollmentsForTraining(trainingId);
+      },
+      error: () => {
+        alert('Failed to unenroll');
+      },
+    });
+  }
 
 
   // Club verwijderen
@@ -168,7 +192,19 @@ export class ClubDetailComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error deleting club', err);
-        this.error = 'Failed to delete club';
+        const status = err?.status;
+        const backendMessage = err?.error?.message;
+
+        if (status === 400) {
+          alert(backendMessage ?? 'Delete failed');
+        } else if (status === 401) {
+          alert('Please login');
+        } else if (status === 403) {
+          alert('You are not allowed to do this');
+        } else {
+          alert(backendMessage ?? 'Delete failed');
+        }
+
         this.deleting = false;
       },
       

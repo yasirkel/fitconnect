@@ -29,8 +29,4 @@ export class CreateClubDto {
   @IsString({ each: true })
   @IsDefined()
   sportsOffered!: string[];
-
-  @IsString()
-  @IsNotEmpty()
-  ownerId!: string;
 }

@@ -27,7 +27,7 @@ export class CreateClubComponent {
     city: ['', Validators.required],
     description: [''],
     sportsOffered: ['', Validators.required], // comma separated string
-    ownerId: ['owner-1', Validators.required], // tijdelijk hardcoded
+    // ownerId is no longer part of the client payload. Backend derives owner from JWT.
   });
 
   loading = false;
@@ -58,7 +58,6 @@ export class CreateClubComponent {
         city: value.city!,
         description: value.description || undefined,
         sportsOffered: sportsArray,
-        ownerId: value.ownerId!,
       })
       .subscribe({
         next: () => {

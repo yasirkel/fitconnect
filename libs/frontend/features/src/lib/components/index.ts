@@ -5,3 +5,6 @@ export { EditClubComponent } from './edit-club/edit-club.component';
 export { TrainingCreateComponent } from './training-create/training-create.component';
 export { TrainingEditComponent } from './training-edit/training-edit.component';
 export { TrainingDetailComponent } from './training-detail/training-detail.component';
+export { LoginComponent } from './login/login.component';
+export { RegisterComponent } from './register/register.component';
+export { HeaderComponent} from './header/header.component';

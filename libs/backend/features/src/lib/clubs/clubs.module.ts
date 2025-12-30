@@ -3,12 +3,17 @@ import { ClubsController } from './clubs.controller';
 import { ClubsService } from './clubs.service';
 
 import { MongooseModule } from '@nestjs/mongoose';
-import { ClubDocument, ClubSchema } from './club.schema';
+import { Club, ClubSchema } from './club.schema';
+import { Training, TrainingSchema } from '../trainings/training.schema';
 
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: ClubDocument.name, schema: ClubSchema }]),
+    MongooseModule.forFeature([
+      { name: Club.name, schema: ClubSchema },
+      { name: Training.name, schema: TrainingSchema },
+    ]),
+    
   ],
   controllers: [ClubsController],
   providers: [ClubsService],

@@ -7,6 +7,15 @@ export class TrainingsService {
   private http = inject(HttpClient);
   private baseUrl = 'http://localhost:3333/api';
 
+  /**
+   * Get trainings for a specific club.
+   * Centralizes the trainings endpoint so other services/components
+   * don't hardcode the API URL (helps when deploying to Azure).
+   */
+  getByClub(clubId: string) {
+    return this.http.get<Training[]>(`${this.baseUrl}/trainings/clubs/${clubId}`);
+  }
+
   createTraining(data: any) {
     return this.http.post<Training>(`${this.baseUrl}/trainings`, data);
   }
