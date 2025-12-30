@@ -9,10 +9,9 @@ export class EnrollmentsService {
   // gebruik dezelfde baseUrl-stijl als je andere services
   private baseUrl = 'http://localhost:3333/api';
 
-  enroll(trainingId: string, userId: string) {
+  enroll(trainingId: string) {
     return this.http.post<Enrollment>(`${this.baseUrl}/enrollments`, {
       trainingId,
-      userId,
     });
   }
 

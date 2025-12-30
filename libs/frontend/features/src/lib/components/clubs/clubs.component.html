@@ -1,8 +1,8 @@
 <h1 class="text-2xl font-bold mb-4">Clubs</h1>
 
-<div *ngIf="loading">Loading clubs...</div>
+<div *ngIf="loading">Loading clubs...</div> 
+<a *ngIf="loggedIn$ | async" routerLink="/clubs/create">+ Create new club</a>
 
-<a routerLink="/clubs/create">+ Create new club</a>
 <br /><br />
 
 <div *ngIf="!loading && error" class="text-red-500">

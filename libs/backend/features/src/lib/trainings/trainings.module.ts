@@ -6,6 +6,7 @@ import { TrainingsService } from './trainings.service';
 import { Training, TrainingSchema } from './training.schema';
 
 import { Club, ClubSchema } from '../clubs/club.schema';
+import { Enrollment, EnrollmentSchema } from '../enrollments/enrollment.schema';
 
 
 @Module({
@@ -13,6 +14,7 @@ import { Club, ClubSchema } from '../clubs/club.schema';
     MongooseModule.forFeature([
       { name: Training.name, schema: TrainingSchema },
       { name: Club.name, schema: ClubSchema },
+      { name: Enrollment.name, schema: EnrollmentSchema },
     ]),
     
   ],

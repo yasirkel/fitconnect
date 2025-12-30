@@ -1,13 +1,14 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { NgIf, NgFor } from '@angular/common';
+import { NgIf, NgFor, AsyncPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ClubsService } from '../../services/clubs.service';
+import { AuthService } from '../../services/auth.service';
 import { Club } from '@fitconnect/api';
 
 @Component({
   selector: 'app-clubs',
   standalone: true,
-  imports: [NgIf, NgFor, RouterModule],
+  imports: [NgIf, NgFor, RouterModule, AsyncPipe],
   templateUrl: './clubs.component.html',
   styleUrls: ['./clubs.component.css']
 })
@@ -17,10 +18,12 @@ export class ClubsComponent implements OnInit {
 // Inject the ClubsService, to fetch club data
   private clubsService = inject(ClubsService);
 
-// Component state, to hold clubs data, loading and error states
+  // Component state, to hold clubs data, loading and error states
   clubs: Club[] = [];
   loading = true;
   error: string | null = null;
+  private authService = inject(AuthService);
+  loggedIn$ = this.authService.loggedIn$;
 
   ngOnInit(): void {
     this.clubsService.getAll().subscribe({

@@ -76,8 +76,20 @@ export class TrainingEditComponent implements OnInit {
 
     this.trainingsService.delete(this.trainingId).subscribe({
       next: () => this.router.navigate(['/clubs', this.clubId]),
-      error: () => {
-        this.error = 'Failed to delete training';
+      error: (err) => {
+        const status = err?.status;
+        const backendMessage = err?.error?.message;
+
+        if (status === 400) {
+          alert(backendMessage ?? 'Delete failed');
+        } else if (status === 401) {
+          alert('Please login');
+        } else if (status === 403) {
+          alert('You are not allowed to do this');
+        } else {
+          alert(backendMessage ?? 'Delete failed');
+        }
+
         this.deleting = false;
       },
     });
