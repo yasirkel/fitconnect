@@ -1,8 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-test('has title', async ({ page }) => {
-  await page.goto('/');
+test('home redirects to clubs and shows Clubs heading', async ({ page }) => {
+  const base = process.env.E2E_BASE_URL || 'http://localhost:4200';
+  await page.goto(base + '/');
 
-  // Expect h1 to contain a substring.
-  expect(await page.locator('h1').innerText()).toContain('Welcome');
+  // App redirects to /clubs
+  await expect(page).toHaveURL(/.*\/clubs/);
+
+  // Clubs page has a visible heading (match the heading element)
+  await expect(page.getByRole('heading', { name: 'Clubs' })).toBeVisible();
 });
