@@ -1,7 +1,15 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
 import { ValidationPipe } from '@nestjs/common';
+
+// Load dotenv first from project root, then override with app-specific .env
 import 'dotenv/config';
+import * as fs from 'fs';
+import * as path from 'path';
+const appEnv = path.resolve(process.cwd(), 'apps/fitconnect-api/.env');
+if (fs.existsSync(appEnv)) {
+  require('dotenv').config({ path: appEnv });
+}
 
 
 async function bootstrap() {
