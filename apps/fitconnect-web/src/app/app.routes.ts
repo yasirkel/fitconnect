@@ -9,11 +9,14 @@ import {
   TrainingDetailComponent,
   LoginComponent,
   RegisterComponent,
-  authGuard, 
+  authGuard,
+  AboutComponent, 
 } from '@fitconnect/frontend-features';
 
 export const appRoutes: Route[] = [
   { path: '', redirectTo: 'clubs', pathMatch: 'full' },
+
+  { path: 'about', component: AboutComponent },
 
   // Training routes
   {

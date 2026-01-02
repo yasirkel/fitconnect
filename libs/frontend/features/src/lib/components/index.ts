@@ -8,3 +8,4 @@ export { TrainingDetailComponent } from './training-detail/training-detail.compo
 export { LoginComponent } from './login/login.component';
 export { RegisterComponent } from './register/register.component';
 export { HeaderComponent} from './header/header.component';
+export { AboutComponent } from './about/about.component';
