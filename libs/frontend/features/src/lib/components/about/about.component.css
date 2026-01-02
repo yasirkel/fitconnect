@@ -1,0 +1,4 @@
+section { margin: 24px 0; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; }
+  pre { background: #f6f6f6; padding: 12px; overflow: auto; }

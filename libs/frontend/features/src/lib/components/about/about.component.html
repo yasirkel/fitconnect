@@ -1,0 +1,145 @@
+<h1>About FitConnect</h1>
+
+<section>
+  <h2>Student</h2>
+  <p><strong>Naam:</strong> VUL_IN</p>
+  <p><strong>Studentnummer:</strong> VUL_IN</p>
+</section>
+
+<section>
+  <h2>Casusbeschrijving</h2>
+  <p>
+    FitConnect is een webapplicatie waarmee sportclubs trainingen kunnen aanbieden
+    en gebruikers zich kunnen inschrijven voor trainingen. Club-eigenaren kunnen
+    hun clubs en trainingen beheren. Gebruikers kunnen trainingen bekijken en zich
+    aan- of afmelden. De applicatie is gebouwd als full-stack SPA met Angular
+    (frontend), NestJS (backend) en MongoDB binnen een Nx monorepo.
+  </p>
+</section>
+
+<section>
+  <h2>ERD / Datamodel</h2>
+  <pre>
+User (sterk)
+- email (string)
+- passwordHash (string)
+- displayName (string)
+- createdAt/updatedAt (date)
+
+Club (sterk)
+- name (string)
+- address (string)
+- city (string)
+- description (string)
+- sportsOffered (string[])
+- ownerId (string)
+
+Training (sterk)
+- clubId (ObjectId)
+- title (string)
+- description (string)
+- startTime (date)
+- durationMinutes (number)
+- capacity (number)
+
+Enrollment (zwak)
+- trainingId (ObjectId)
+- userId (string)
+- createdAt (date)
+
+Relaties:
+Club 1—N Training
+Training 1—N Enrollment
+User 1—N Enrollment
+User ↔ Training is M:N via Enrollment
+  </pre>
+</section>
+
+<section>
+  <h2>Functionele requirements</h2>
+
+  <table border="1" cellpadding="8" cellspacing="0">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Functional Requirement</th>
+        <th>Acceptatiecriteria</th>
+        <th>Prioriteit (MoSCoW)</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td>F-01</td>
+        <td>Als gebruiker wil ik een lijst van sportclubs kunnen bekijken, zodat ik weet welke clubs beschikbaar zijn.</td>
+        <td>
+          <ul>
+            <li>Er wordt een lijst met clubs weergegeven.</li>
+            <li>Per club wordt minimaal naam en stad weergegeven.</li>
+          </ul>
+        </td>
+        <td>Must</td>
+      </tr>
+
+      <tr>
+        <td>F-02</td>
+        <td>Als gebruiker wil ik de details van een club kunnen bekijken, zodat ik info en trainingen kan zien.</td>
+        <td>
+          <ul>
+            <li>Vanaf de clublijst kan ik naar een clubdetail navigeren.</li>
+            <li>In clubdetail zie ik clubinformatie en trainingen van de club.</li>
+          </ul>
+        </td>
+        <td>Must</td>
+      </tr>
+
+      <tr>
+        <td>F-03</td>
+        <td>Als gebruiker wil ik me kunnen inschrijven voor een training, zodat ik kan deelnemen.</td>
+        <td>
+          <ul>
+            <li>In trainingdetail is een knop om in te schrijven.</li>
+            <li>Een gebruiker kan zich maar 1 keer inschrijven voor dezelfde training.</li>
+          </ul>
+        </td>
+        <td>Must</td>
+      </tr>
+
+      <tr>
+        <td>F-04</td>
+        <td>Als club-eigenaar wil ik clubs kunnen aanmaken/wijzigen/verwijderen, zodat ik mijn clubpagina kan beheren.</td>
+        <td>
+          <ul>
+            <li>Mutaties vereisen login (JWT).</li>
+            <li>Alleen de owner kan update/delete (anders 403).</li>
+          </ul>
+        </td>
+        <td>Must</td>
+      </tr>
+
+      <tr>
+        <td>F-05</td>
+        <td>Als club-eigenaar wil ik trainingen kunnen beheren, zodat ik het trainingsaanbod kan aanpassen.</td>
+        <td>
+          <ul>
+            <li>Mutaties vereisen login (JWT).</li>
+            <li>Alleen club-owner kan training create/update/delete (anders 403).</li>
+          </ul>
+        </td>
+        <td>Must</td>
+      </tr>
+
+      <tr>
+        <td>F-06</td>
+        <td>Als systeem wil ik verwijderacties blokkeren als er child-records bestaan, zodat data consistent blijft.</td>
+        <td>
+          <ul>
+            <li>Club delete geeft 400 als er nog trainingen bestaan.</li>
+            <li>Training delete geeft 400 als er nog enrollments bestaan.</li>
+          </ul>
+        </td>
+        <td>Should</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
