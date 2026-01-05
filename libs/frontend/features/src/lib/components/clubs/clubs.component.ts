@@ -3,6 +3,9 @@ import { NgIf, NgFor, AsyncPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ClubsService } from '../../services/clubs.service';
 import { AuthService } from '../../services/auth.service';
+import { Neo4jRecommendationsService, RecommendedClub } from '../../services/neo4j-recommendations.service';
+import { Observable, of } from 'rxjs';
+import { switchMap, tap, catchError } from 'rxjs/operators';
 import { Club } from '@fitconnect/api';
 
 @Component({
@@ -24,6 +27,12 @@ export class ClubsComponent implements OnInit {
   error: string | null = null;
   private authService = inject(AuthService);
   loggedIn$ = this.authService.loggedIn$;
+  private neo4j = inject(Neo4jRecommendationsService);
+
+  // Recommendation state
+  recommended$: Observable<RecommendedClub[] | null> = of(null);
+  recommendationsLoading = false;
+  recommendationsError: string | null = null;
 
   ngOnInit(): void {
     this.clubsService.getAll().subscribe({
@@ -37,5 +46,24 @@ export class ClubsComponent implements OnInit {
         this.loading = false;
       },
     });
+
+    // load recommendations when user is logged in
+    this.recommended$ = this.loggedIn$.pipe(
+      switchMap((loggedIn) => {
+        this.recommendationsError = null;
+        if (!loggedIn) {
+          return of(null);
+        }
+        this.recommendationsLoading = true;
+        return this.neo4j.getRecommendedClubs().pipe(
+          tap(() => (this.recommendationsLoading = false)),
+          catchError((err) => {
+            this.recommendationsLoading = false;
+            this.recommendationsError = err?.error?.message || err?.message || 'Failed to load recommendations';
+            return of([]);
+          })
+        );
+      })
+    );
   }
 }

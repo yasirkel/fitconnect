@@ -26,3 +26,29 @@
 <div *ngIf="!loading && !error && clubs.length === 0">
   No clubs available.
 </div>
+
+<!-- Recommendations block -->
+<section class="mt-6">
+  <ng-container *ngIf="loggedIn$ | async; else notLoggedIn">
+    <h2 class="text-xl font-semibold mb-2">Recommended for you</h2>
+
+    <div *ngIf="recommendationsLoading">Loading recommendations...</div>
+    <div *ngIf="recommendationsError" class="text-red-500">{{ recommendationsError }}</div>
+
+    <ul *ngIf="!recommendationsLoading && !recommendationsError">
+      <ng-container *ngIf="(recommended$ | async) as recs">
+        <li *ngIf="recs === null" class="text-gray-500">Loading recommendations...</li>
+        <li *ngIf="Array.isArray(recs) && recs.length === 0" class="text-gray-600">No recommendations yet</li>
+        <li *ngFor="let r of recs" class="mb-2">
+          <a [routerLink]="['/clubs', r.clubId]" class="text-blue-600 underline">
+            {{ r.clubName }} <small class="text-sm">(score: {{ r.score }})</small>
+          </a>
+        </li>
+      </ng-container>
+    </ul>
+  </ng-container>
+
+  <ng-template #notLoggedIn>
+    <div class="text-gray-500">Login to see recommendations</div>
+  </ng-template>
+</section>
