@@ -9,3 +9,4 @@ export * from './auth/auth.service';
 export * from './auth/auth.controller';
 export * from './auth/jwt.strategy';
 export * from './auth/jwt-auth.guard';
+export * from './neo4j-enrollments/neo4j-enrollments.module';

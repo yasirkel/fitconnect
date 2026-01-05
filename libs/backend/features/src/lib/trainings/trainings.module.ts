@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { Neo4jModule } from '@fitconnect/backend-neo4j';
 
 import { TrainingsController } from './trainings.controller';
 import { TrainingsService } from './trainings.service';
@@ -16,7 +17,7 @@ import { Enrollment, EnrollmentSchema } from '../enrollments/enrollment.schema';
       { name: Club.name, schema: ClubSchema },
       { name: Enrollment.name, schema: EnrollmentSchema },
     ]),
-    
+    Neo4jModule,
   ],
   controllers: [TrainingsController],
   providers: [TrainingsService],

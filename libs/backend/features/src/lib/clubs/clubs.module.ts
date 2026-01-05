@@ -5,6 +5,7 @@ import { ClubsService } from './clubs.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Club, ClubSchema } from './club.schema';
 import { Training, TrainingSchema } from '../trainings/training.schema';
+import { Neo4jModule } from '@fitconnect/backend-neo4j';
 
 
 @Module({
@@ -13,7 +14,7 @@ import { Training, TrainingSchema } from '../trainings/training.schema';
       { name: Club.name, schema: ClubSchema },
       { name: Training.name, schema: TrainingSchema },
     ]),
-    
+    Neo4jModule,
   ],
   controllers: [ClubsController],
   providers: [ClubsService],
