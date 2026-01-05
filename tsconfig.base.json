@@ -18,7 +18,8 @@
       "@fitconnect/api": ["libs/shared/api/src/index.ts"],
       "@fitconnect/dto": ["libs/backend/dto/src/index.ts"],
       "@fitconnect/features": ["libs/backend/features/src/index.ts"],
-      "@fitconnect/frontend-features": ["libs/frontend/features/src/index.ts"]
+      "@fitconnect/frontend-features": ["libs/frontend/features/src/index.ts"],
+      "@fitconnect/backend-neo4j": ["libs/backend/neo4j/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

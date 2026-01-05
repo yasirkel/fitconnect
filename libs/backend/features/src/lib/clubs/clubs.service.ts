@@ -10,6 +10,7 @@ import { Model } from 'mongoose';
 import { Club, ClubDocument } from './club.schema';
 import { Training, TrainingDocument } from '../trainings/training.schema'; 
 import { CreateClubDto, UpdateClubDto } from '@fitconnect/dto';
+import { Neo4jEnrollmentSyncService } from '@fitconnect/backend-neo4j';
 
 @Injectable()
 export class ClubsService {
@@ -19,6 +20,8 @@ export class ClubsService {
 
     @InjectModel(Training.name)
     private readonly trainingModel: Model<TrainingDocument> 
+    ,
+    private readonly neoSync?: Neo4jEnrollmentSyncService,
   ) {}
 
   async findAll(): Promise<ClubDocument[]> {
@@ -47,6 +50,13 @@ export class ClubsService {
       ...data,
       ownerId,
     });
+    try {
+      if (this.neoSync) {
+        await this.neoSync.upsertClub({ clubId: created._id.toString(), clubName: created.name });
+      }
+    } catch {
+      // ignore
+    }
     return created;
   }
 
@@ -58,6 +68,13 @@ export class ClubsService {
       .exec();
 
     if (!updated) throw new NotFoundException(`Club ${id} not found`);
+    try {
+      if (this.neoSync) {
+        await this.neoSync.upsertClub({ clubId: updated._id.toString(), clubName: updated.name });
+      }
+    } catch {
+      // ignore
+    }
     return updated;
   }
 
@@ -72,6 +89,14 @@ export class ClubsService {
 
     const res = await this.clubModel.findByIdAndDelete(id).exec();
     if (!res) throw new NotFoundException(`Club ${id} not found`);
+
+    try {
+      if (this.neoSync) {
+        await this.neoSync.removeClub({ clubId: id });
+      }
+    } catch {
+      // ignore
+    }
 
     return { success: true };
   }

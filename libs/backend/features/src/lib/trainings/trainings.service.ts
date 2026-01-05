@@ -11,6 +11,7 @@ import { Training, TrainingDocument } from './training.schema';
 import { Club, ClubDocument } from '../clubs/club.schema';
 import { Enrollment, EnrollmentDocument } from '../enrollments/enrollment.schema';
 import { CreateTrainingDto, UpdateTrainingDto } from '@fitconnect/dto';
+import { Neo4jEnrollmentSyncService } from '@fitconnect/backend-neo4j';
 
 @Injectable()
 export class TrainingsService {
@@ -23,6 +24,7 @@ export class TrainingsService {
 
     @InjectModel(Enrollment.name)
     private readonly enrollmentModel: Model<EnrollmentDocument>, 
+    private readonly neoSync?: Neo4jEnrollmentSyncService,
   ) {}
 
   async findAll(): Promise<TrainingDocument[]> {
@@ -53,10 +55,20 @@ export class TrainingsService {
   async create(dto: CreateTrainingDto, userId: string): Promise<TrainingDocument> {
     await this.assertClubOwner(dto.clubId, userId);
 
-    return this.trainingModel.create({
+    const created = await this.trainingModel.create({
       ...dto,
       clubId: new Types.ObjectId(dto.clubId),
     });
+
+    try {
+      if (this.neoSync) {
+        await this.neoSync.upsertTraining({ trainingId: created._id.toString(), trainingTitle: created.title, clubId: dto.clubId });
+      }
+    } catch {
+      // ignore
+    }
+
+    return created;
   }
 
   private async assertTrainingOwner(trainingId: string, userId: string) {
@@ -75,6 +87,13 @@ export class TrainingsService {
       .exec();
 
     if (!updated) throw new NotFoundException('Training not found');
+    try {
+      if (this.neoSync) {
+        await this.neoSync.upsertTraining({ trainingId: updated._id.toString(), trainingTitle: updated.title, clubId: (updated as any).clubId?.toString() });
+      }
+    } catch {
+      // ignore
+    }
     return updated;
   }
 
@@ -92,6 +111,14 @@ export class TrainingsService {
 
     const deleted = await this.trainingModel.findByIdAndDelete(id).exec();
     if (!deleted) throw new NotFoundException('Training not found');
+
+    try {
+      if (this.neoSync) {
+        await this.neoSync.removeTraining({ trainingId: id });
+      }
+    } catch {
+      // ignore
+    }
 
     return { success: true };
   }

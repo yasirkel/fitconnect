@@ -44,3 +44,9 @@ Thumbs.db
 .github/instructions/nx.instructions.md
 
 .angular
+
+# Environment files (do not commit secrets)
+# Ignore backend .env but keep example files tracked
+apps/fitconnect-api/.env
+.env.local
+*.env.local
