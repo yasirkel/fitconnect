@@ -1,19 +1,29 @@
-<nav style="margin-bottom: 1rem;">
-  <a routerLink="/clubs">Clubs</a>
-  &nbsp; | &nbsp;
-  <a routerLink="/about">About</a>
+<nav class="bg-white shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 items-center">
+      <div class="flex items-center gap-4">
+        <a routerLink="/" class="flex items-center gap-3">
+          <img src="/assets/logo.png" alt="FitConnect" class="h-8 w-8 rounded-md bg-emerald-500 p-1" *ngIf="true" />
+          <span class="font-semibold text-lg text-slate-800">FitConnect</span>
+        </a>
 
-  <span *ngIf="loggedIn">
-    &nbsp; | &nbsp;
-    Logged in as: {{ email }}
-    &nbsp; | &nbsp;
-    <button type="button" (click)="logout()">Logout</button>
-  </span>
+        <div class="hidden sm:flex sm:items-center sm:space-x-4">
+          <a routerLink="/clubs" class="text-slate-700 hover:text-emerald-600">Clubs</a>
+          <a routerLink="/about" class="text-slate-700 hover:text-emerald-600">About</a>
+        </div>
+      </div>
 
-  <span *ngIf="!loggedIn">
-    &nbsp; | &nbsp;
-    <a routerLink="/login">Login</a>
-    &nbsp; | &nbsp;
-    <a routerLink="/register">Register</a>
-  </span>
+      <div class="flex items-center gap-4">
+        <ng-container *ngIf="loggedIn; else loggedOut">
+          <div class="text-sm text-slate-700">Logged in as <span class="font-medium">{{ email }}</span></div>
+          <button type="button" (click)="logout()" class="bg-emerald-600 text-white px-3 py-1 rounded hover:bg-emerald-700">Logout</button>
+        </ng-container>
+
+        <ng-template #loggedOut>
+          <a routerLink="/login" class="text-slate-700 hover:text-emerald-600">Login</a>
+          <a routerLink="/register" class="ml-2 text-slate-700 hover:text-emerald-600">Register</a>
+        </ng-template>
+      </div>
+    </div>
+  </div>
 </nav>

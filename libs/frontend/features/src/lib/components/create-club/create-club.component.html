@@ -1,67 +1,46 @@
-<h1>Create new club</h1>
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold">Create new club</h1>
+    <a routerLink="/clubs" class="text-slate-600 hover:text-emerald-600">&larr; Back to clubs</a>
+  </div>
 
-<a routerLink="/clubs">&larr; Back to clubs</a>
-
-<form [formGroup]="form" (ngSubmit)="onSubmit()" style="margin-top: 1rem;">
-  <div>
-    <label>
-      Name:
-      <input type="text" formControlName="name" />
-    </label>
-    <div *ngIf="form.controls.name.touched && form.controls.name.invalid">
-      Name is required.
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="bg-white p-6 rounded-lg shadow space-y-4">
+    <div>
+      <label class="block text-sm font-medium text-slate-700">Name</label>
+      <input type="text" formControlName="name" class="mt-1 block w-full rounded border border-gray-300 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" />
+      <div *ngIf="form.controls.name.touched && form.controls.name.invalid" class="text-sm text-red-600 mt-1">Name is required.</div>
     </div>
-  </div>
 
-  <div>
-    <label>
-      Address:
-      <input type="text" formControlName="address" />
-    </label>
-    <div *ngIf="form.controls.address.touched && form.controls.address.invalid">
-      Address is required.
+    <div>
+      <label class="block text-sm font-medium text-slate-700">Address</label>
+      <input type="text" formControlName="address" class="mt-1 block w-full rounded border border-gray-300 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" />
+      <div *ngIf="form.controls.address.touched && form.controls.address.invalid" class="text-sm text-red-600 mt-1">Address is required.</div>
     </div>
-  </div>
 
-  <div>
-    <label>
-      City:
-      <input type="text" formControlName="city" />
-    </label>
-    <div *ngIf="form.controls.city.touched && form.controls.city.invalid">
-      City is required.
+    <div>
+      <label class="block text-sm font-medium text-slate-700">City</label>
+      <input type="text" formControlName="city" class="mt-1 block w-full rounded border border-gray-300 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" />
+      <div *ngIf="form.controls.city.touched && form.controls.city.invalid" class="text-sm text-red-600 mt-1">City is required.</div>
     </div>
-  </div>
 
-  <div>
-    <label>
-      Description:
-      <textarea formControlName="description"></textarea>
-    </label>
-  </div>
-
-  <div>
-    <label>
-      Sports offered (comma separated):
-      <input type="text" formControlName="sportsOffered" />
-    </label>
-    <div
-      *ngIf="
-        form.controls.sportsOffered.touched &&
-        form.controls.sportsOffered.invalid
-      "
-    >
-      At least one sport is required.
+    <div>
+      <label class="block text-sm font-medium text-slate-700">Description</label>
+      <textarea formControlName="description" class="mt-1 block w-full rounded border border-gray-300 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" rows="4"></textarea>
     </div>
-  </div>
 
-  <!-- Owner ID removed: backend assigns owner based on authenticated user -->
+    <div>
+      <label class="block text-sm font-medium text-slate-700">Sports offered (comma separated)</label>
+      <input type="text" formControlName="sportsOffered" class="mt-1 block w-full rounded border border-gray-300 bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" />
+      <div *ngIf="form.controls.sportsOffered.touched && form.controls.sportsOffered.invalid" class="text-sm text-red-600 mt-1">At least one sport is required.</div>
+    </div>
 
-  <div *ngIf="error" style="color: red; margin-top: 0.5rem;">
-    {{ error }}
-  </div>
+    <div *ngIf="error" class="text-sm text-red-600">{{ error }}</div>
 
-  <button type="submit" [disabled]="loading">
-    {{ loading ? 'Creating...' : 'Create club' }}
-  </button>
-</form>
+    <div class="flex items-center gap-3">
+      <button type="submit" [disabled]="loading" class="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700 disabled:opacity-60">
+        {{ loading ? 'Creating...' : 'Create club' }}
+      </button>
+      
+    </div>
+  </form>
+</div>

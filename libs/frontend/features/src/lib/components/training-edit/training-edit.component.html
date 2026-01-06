@@ -1,36 +1,42 @@
-<h1>Edit Training</h1>
-
-<div *ngIf="loading">Loading training...</div>
-<p *ngIf="error">{{ error }}</p>
-
-<form *ngIf="!loading" [formGroup]="form" (ngSubmit)="save()">
-  <div>
-    <label for="title">Title</label><br />
-    <input id="title" formControlName="title" />
+<div class="space-y-4">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold">Edit Training</h1>
+    <a routerLink="/clubs" class="text-slate-600 hover:text-emerald-600">&larr; Back</a>
   </div>
 
-  <div>
-    <label for="description">Description</label><br />
-    <textarea id="description" formControlName="description"></textarea>
-  </div>
+  <div *ngIf="loading" class="text-center py-4">Loading training...</div>
+  <p *ngIf="error" class="text-sm text-red-600">{{ error }}</p>
 
-  <div>
-    <label for="startTime">Start time</label><br />
-    <input id="startTime" type="datetime-local" formControlName="startTime" />
-  </div>
+  <form *ngIf="!loading" [formGroup]="form" (ngSubmit)="save()" class="bg-white p-6 rounded-lg shadow space-y-4">
+    <div>
+      <label class="block text-sm font-medium text-slate-700" for="title">Title</label>
+      <input id="title" formControlName="title" class="mt-1 block w-full rounded border border-gray-300 bg-slate-50" />
+    </div>
 
-  <div>
-    <label for="durationMinutes">Duration (minutes)</label><br />
-    <input id="durationMinutes" type="number" formControlName="durationMinutes" />
-  </div>
+    <div>
+      <label class="block text-sm font-medium text-slate-700" for="description">Description</label>
+      <textarea id="description" formControlName="description" class="mt-1 block w-full rounded border border-gray-300 bg-slate-50" rows="4"></textarea>
+    </div>
 
-  <div>
-    <label for="capacity">Capacity</label><br />
-    <input id="capacity" type="number" formControlName="capacity" />
-  </div>
+    <div>
+      <label class="block text-sm font-medium text-slate-700" for="startTime">Start time</label>
+      <input id="startTime" type="datetime-local" formControlName="startTime" class="mt-1 block w-full rounded border border-gray-300 bg-slate-50" />
+    </div>
 
-  <button type="submit">Save</button>
-  <button type="button" (click)="delete()" [disabled]="deleting">
-    {{ deleting ? 'Deleting...' : 'Delete' }}
-  </button>
-</form>
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium text-slate-700" for="durationMinutes">Duration (minutes)</label>
+        <input id="durationMinutes" type="number" formControlName="durationMinutes" class="mt-1 block w-full rounded border border-gray-300 bg-slate-50" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-slate-700" for="capacity">Capacity</label>
+        <input id="capacity" type="number" formControlName="capacity" class="mt-1 block w-full rounded border border-gray-300 bg-slate-50" />
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button type="submit" class="px-4 py-2 bg-emerald-600 text-white rounded hover:bg-emerald-700">Save</button>
+      <button type="button" (click)="delete()" [disabled]="deleting" class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 disabled:opacity-60">{{ deleting ? 'Deleting...' : 'Delete' }}</button>
+    </div>
+  </form>
+</div>

@@ -1,74 +1,71 @@
-<a routerLink="/clubs">&larr; Back to clubs</a> <br>
+<a routerLink="/clubs" class="text-slate-600 hover:text-emerald-600">&larr; Back to clubs</a>
 
+<div *ngIf="loading" class="text-center py-4">Loading club details...</div>
 
-<div *ngIf="loading">Loading club details...</div>
+<div *ngIf="!loading && error" class="text-sm text-red-600">{{ error }}</div>
 
-<div *ngIf="!loading && error">
-  {{ error }}
-</div>
-
-<div *ngIf="!loading && !error && club">
-  <h1 class="text-2xl font-bold mb-2">
-    {{ club.name }}
-  </h1>
-
-  <p class="mb-2">
-    <strong>City:</strong> {{ club.city }}
-  </p>
-
-  <p class="mb-2" *ngIf="club.description">
-    <strong>Description:</strong> {{ club.description }}
-  </p>
-
-  <p class="mb-2">
-    <strong>Address:</strong> {{ club.address }}
-  </p>
-
-  <p class="mb-2">
-    <strong>Sports offered:</strong>
-    <span *ngIf="club.sportsOffered?.length; else noSports">
-      {{ club.sportsOffered.join(', ') }}
-    </span>
-    <ng-template #noSports>Not specified</ng-template>
-  </p>
-
-  <div style="margin: 1rem 0;">
-    <a *ngIf="isOwner" [routerLink]="['/clubs', club.id, 'edit']">Edit club</a>
-    &nbsp; | &nbsp;
-    <button (click)="onDelete()" [disabled]="deleting">
-      {{ deleting ? 'Deleting...' : 'Delete club' }}
-    </button>
-  </div>
-<div *ngIf="!loading && !error && !club">
-  Club not found.
-</div>
-
-<!-- Trainings section -->
-<h2>Trainings</h2> <a *ngIf="club && isOwner" [routerLink]="['/trainings/create']" [queryParams]="{ clubId: club.id }"> + Add training</a>
-
-
-<p *ngIf="trainingsLoading">Trainings laden...</p>
-<p *ngIf="trainingsError">{{ trainingsError }}</p>
-
-<ul *ngIf="!trainingsLoading && !trainingsError && trainings.length > 0">
-  <li *ngFor="let t of trainings">
-    <strong>{{ t.title }}</strong><br/>
-    {{ t.startTime | date:'short' }} · {{ t.durationMinutes }} min · max {{ t.capacity }} ·
-    Enrolled: {{ getEnrolledCount(t.id) }} / {{ t.capacity }}
-
-    <br/>
-
-    <button *ngIf="!isEnrolled(t.id)" (click)="enroll(t.id)" [disabled]="isFull(t.id, t.capacity)">Enroll</button>
-    <button *ngIf="isEnrolled(t.id)" (click)="unenroll(t.id)">Unenroll</button>
-
-    <br/>
+<div *ngIf="!loading && !error && club" class="space-y-6">
+  <div class="bg-white border border-gray-200 rounded-lg p-6">
+    <h1 class="text-2xl font-bold mb-1">{{ club.name }}</h1>
+    <div class="text-sm text-slate-600">{{ club.city }} · {{ club.address }}</div>
+    <div class="mt-4 text-sm text-slate-600">
+      <strong>Sports: </strong>
+      <span *ngIf="club.sportsOffered?.length; else noSports">{{ club.sportsOffered.join(', ') }}</span>
+      <ng-template #noSports>Not specified</ng-template>
+    </div>
     
-    <a [routerLink]="['/trainings', t.id]">View</a>
-    <a *ngIf="isOwner" [routerLink]="['/trainings', t.id, 'edit']">Edit</a>
-  </li>
-</ul>
+    <div class="mt-4 text-slate-700" *ngIf="club.description">
+      {{ club.description }}
+    </div>
 
-<p *ngIf="!trainingsLoading && !trainingsError && trainings.length === 0">
-  Nog geen trainingen voor deze club.
-</p>
+
+    
+    <!-- Club delete/edit buttons -->
+    <div class="flex items-center gap-3 mt-4">
+      <ng-container *ngIf="isOwner">
+        <a [routerLink]="['/clubs', club.id, 'edit']" class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded hover:bg-emerald-200">Edit club</a>
+        <button (click)="onDelete()" [disabled]="deleting" class="px-3 py-1 bg-red-100 text-red-700 rounded hover:bg-red-200 disabled:opacity-60">{{ deleting ? 'Deleting...' : 'Delete club' }}</button>
+      </ng-container>
+    </div>
+    <br><br>
+    <!-- Trainings section (light grey panel) -->
+  <div class="bg-slate-50 border border-gray-100 rounded-lg p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-xl font-semibold">Trainings</h2>
+      <a *ngIf="club && isOwner" [routerLink]="['/trainings/create']" [queryParams]="{ clubId: club.id }" class="inline-flex items-center gap-2 px-3 py-1 bg-emerald-600 text-white rounded hover:bg-emerald-700">+ Add training</a>
+    </div>
+    
+    <div *ngIf="trainingsLoading" class="text-slate-600">Loading trainings...</div>
+    <div *ngIf="trainingsError" class="text-sm text-red-600">{{ trainingsError }}</div>
+
+      <div *ngIf="!trainingsLoading && !trainingsError && trainings.length > 0" class="grid gap-4 sm:grid-cols-2">
+        <div *ngFor="let t of trainings" class="bg-white border border-gray-200 rounded-md p-4">
+          <div class="flex items-start justify-between">
+            <div>
+              <div class="font-medium text-slate-800">{{ t.title }}</div>
+              <div class="text-sm text-slate-600">{{ t.startTime | date:'short' }} · {{ t.durationMinutes }} min</div>
+              <div class="text-sm text-slate-500">Capacity: {{ t.capacity }} · Enrolled: {{ getEnrolledCount(t.id) }} / {{ t.capacity }}</div>
+            </div>
+            <div class="ml-4 flex items-end gap-2">
+              <div>
+                <a [routerLink]="['/trainings', t.id]" class="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 mr-[5px]">View</a>
+                <button *ngIf="!isEnrolled(t.id)" (click)="enroll(t.id)" [disabled]="isFull(t.id, t.capacity)" class="px-3 py-1 bg-emerald-600 text-white rounded hover:bg-emerald-700 disabled:opacity-60">Enroll</button>
+                <button *ngIf="isEnrolled(t.id)" (click)="unenroll(t.id)" class="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">Unenroll</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <div *ngIf="!trainingsLoading && !trainingsError && trainings.length === 0" class="text-slate-600">No trainings for this club yet.</div>
+      </div>
+    </div>
+
+  </div>
+
+  
+
+  
+
+<div *ngIf="!loading && !error && !club" class="text-slate-600">Club not found.</div>
 

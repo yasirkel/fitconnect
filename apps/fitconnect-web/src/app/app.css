@@ -1,0 +1,13 @@
+/* Page content utilities (fallbacks if Tailwind isn't applied yet) */
+.page-content {
+	max-width: 1120px; /* approx max-w-7xl */
+	margin-left: auto;
+	margin-right: auto;
+	padding-left: 1rem;
+	padding-right: 1rem;
+}
+
+.page-vertical {
+	padding-top: 1.5rem;
+	padding-bottom: 1.5rem;
+}

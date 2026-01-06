@@ -1,30 +1,37 @@
-<h1 class="text-2xl font-bold mb-4">Clubs</h1>
+<div class="">
+  <h1 class="text-2xl font-bold mb-4">Clubs</h1>
 
-<div *ngIf="loading">Loading clubs...</div> 
-<a *ngIf="loggedIn$ | async" routerLink="/clubs/create">+ Create new club</a>
+  <div *ngIf="loading" class="text-center py-8">Loading clubs...</div>
 
-<br /><br />
+  <div class="flex items-center justify-between mb-4">
+    <div></div>
+    <a *ngIf="loggedIn$ | async" routerLink="/clubs/create" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded shadow hover:bg-emerald-700">+ Create new club</a>
+  </div>
 
-<div *ngIf="!loading && error" class="text-red-500">
-  {{ error }}
-</div>
+  <div *ngIf="!loading && error" class="text-red-500 mb-4">
+    {{ error }}
+  </div>
 
-<ul *ngIf="!loading && !error && clubs.length">
-  <li *ngFor="let club of clubs" class="mb-4 p-3 border rounded">
-    <strong>{{ club.name }}</strong> – {{ club.city }}<br />
-    <small>Sports: {{ club.sportsOffered.join(', ') }}</small>
-    <br />
-    <a
-      [routerLink]="['/clubs', club.id]"
-      class="text-blue-600 underline"
-    >
-      View details
-    </a>
-  </li>
-</ul>
+  <ul *ngIf="!loading && !error && clubs.length" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <li *ngFor="let club of clubs" class="bg-white rounded-lg shadow p-4 flex flex-col justify-between hover:shadow-lg transition-shadow">
+      <div>
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-semibold text-slate-800">{{ club.name }}</h3>
+          <span class="text-sm text-slate-500">{{ club.city }}</span>
+        </div>
+        <p class="text-sm text-slate-600 mt-2">Sports: <span class="text-slate-700 font-medium">{{ club.sportsOffered.join(', ') }}</span></p>
+      </div>
 
-<div *ngIf="!loading && !error && clubs.length === 0">
-  No clubs available.
+      <div class="mt-4 flex items-center justify-between">
+        <a [routerLink]="['/clubs', club.id]" class="text-emerald-600 hover:text-emerald-700 font-medium">View details</a>
+        <button class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded text-sm">Members</button>
+      </div>
+    </li>
+  </ul>
+
+  <div *ngIf="!loading && !error && clubs.length === 0" class="text-center text-slate-600 py-8">
+    No clubs available.
+  </div>
 </div>
 
 <!-- Recommendations block -->
@@ -32,20 +39,21 @@
   <ng-container *ngIf="loggedIn$ | async; else notLoggedIn">
     <h2 class="text-xl font-semibold mb-2">Recommended for you</h2>
 
-    <div *ngIf="recommendationsLoading">Loading recommendations...</div>
     <div *ngIf="recommendationsError" class="text-red-500">{{ recommendationsError }}</div>
 
-    <ul *ngIf="!recommendationsLoading && !recommendationsError">
+    <div *ngIf="!recommendationsError">
       <ng-container *ngIf="(recommended$ | async) as recs">
-        <li *ngIf="recs === null" class="text-gray-500">Loading recommendations...</li>
-        <li *ngIf="Array.isArray(recs) && recs.length === 0" class="text-gray-600">No recommendations yet</li>
-        <li *ngFor="let r of recs" class="mb-2">
-          <a [routerLink]="['/clubs', r.clubId]" class="text-blue-600 underline">
-            {{ r.clubName }} <small class="text-sm">(score: {{ r.score }})</small>
-          </a>
-        </li>
+        <div *ngIf="recs === null" class="text-gray-500">Loading recommendations...</div>
+        <div *ngIf="recs && recs.length === 0" class="text-gray-600">No recommendations yet</div>
+
+        <ul *ngIf="recs && recs.length" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mt-2">
+          <li *ngFor="let r of recs" class="bg-white rounded-md p-3 shadow-sm flex items-center justify-between">
+            <a [routerLink]="['/clubs', r.clubId]" class="text-slate-800 font-medium hover:text-emerald-600">{{ r.clubName }}</a>
+            <span class="text-sm text-slate-500">score: <span class="font-semibold text-emerald-600">{{ r.score }}</span></span>
+          </li>
+        </ul>
       </ng-container>
-    </ul>
+    </div>
   </ng-container>
 
   <ng-template #notLoggedIn>

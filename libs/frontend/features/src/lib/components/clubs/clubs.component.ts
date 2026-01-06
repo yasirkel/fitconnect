@@ -5,7 +5,7 @@ import { ClubsService } from '../../services/clubs.service';
 import { AuthService } from '../../services/auth.service';
 import { Neo4jRecommendationsService, RecommendedClub } from '../../services/neo4j-recommendations.service';
 import { Observable, of } from 'rxjs';
-import { switchMap, tap, catchError } from 'rxjs/operators';
+import { switchMap, catchError, startWith } from 'rxjs/operators';
 import { Club } from '@fitconnect/api';
 
 @Component({
@@ -31,7 +31,6 @@ export class ClubsComponent implements OnInit {
 
   // Recommendation state
   recommended$: Observable<RecommendedClub[] | null> = of(null);
-  recommendationsLoading = false;
   recommendationsError: string | null = null;
 
   ngOnInit(): void {
@@ -48,22 +47,21 @@ export class ClubsComponent implements OnInit {
     });
 
     // load recommendations when user is logged in
+    // use `null` as the initial value to indicate loading in the template
     this.recommended$ = this.loggedIn$.pipe(
       switchMap((loggedIn) => {
         this.recommendationsError = null;
         if (!loggedIn) {
-          return of(null);
+          return of<RecommendedClub[] | null>(null);
         }
-        this.recommendationsLoading = true;
         return this.neo4j.getRecommendedClubs().pipe(
-          tap(() => (this.recommendationsLoading = false)),
           catchError((err) => {
-            this.recommendationsLoading = false;
             this.recommendationsError = err?.error?.message || err?.message || 'Failed to load recommendations';
-            return of([]);
+            return of<RecommendedClub[]>([]);
           })
         );
-      })
+      }),
+      startWith<RecommendedClub[] | null>(null)
     );
   }
 }
