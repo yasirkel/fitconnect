@@ -19,7 +19,7 @@ export class Enrollment {
   @Prop({ type: Types.ObjectId, required: true, index: true })
   trainingId!: Types.ObjectId;
 
-  @Prop({ required: true })
+  @Prop({ required: true, index: true })
   userId!: string;
 }
 
