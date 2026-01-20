@@ -19,10 +19,20 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      - run: npm ci
+      - name: Install root dependencies
+        run: npm ci
 
-      - run: npx nx run fitconnect-api:build:production
-      - run: npx nx run fitconnect-api:prune
+      - name: Build NestJS (production)
+        run: npx nx run fitconnect-api:build:production
+
+      - name: Prune for deployment
+        run: npx nx run fitconnect-api:prune
+
+      # ✅ Critical fix: ensure node_modules (incl. tslib) exists in the deployed package
+      - name: Install production dependencies in dist
+        run: |
+          cd dist/apps/fitconnect-api
+          npm ci --omit=dev
 
       - name: Zip artifact
         run: |
