@@ -1,0 +1,37 @@
+name: Deploy NestJS to Azure Web App
+
+on:
+  push:
+    branches:
+      - release
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm ci
+
+      - run: npx nx run fitconnect-api:build:production
+      - run: npx nx run fitconnect-api:prune
+
+      - name: Zip artifact
+        run: |
+          cd dist/apps/fitconnect-api
+          zip -r ../../../deploy.zip .
+
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: fitconnect-nestjs
+          publish-profile: ${{ secrets.NESTJS_PUBLISHPROFILE }}
+          package: deploy.zip

@@ -62,7 +62,7 @@ export class Neo4jEnrollmentSyncService {
     );
   }
 
-  // Upsert user node with email/displayName
+  // Upsert user node met eventuele email en displayName
   async upsertUser(input: { userId: string; email?: string | null; displayName?: string | null }) {
     const { userId, email, displayName } = input;
     await this.neo.run(
@@ -86,7 +86,7 @@ export class Neo4jEnrollmentSyncService {
     );
   }
 
-  // Upsert training and ensure AT_CLUB relation
+  // Upsert training en zorgt ook voor de relatie met club AT_CLUB
   async upsertTraining(input: { trainingId: string; trainingTitle?: string | null; clubId?: string | null; clubName?: string | null }) {
     const { trainingId, trainingTitle, clubId, clubName } = input;
     await this.neo.run(

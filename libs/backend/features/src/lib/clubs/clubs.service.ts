@@ -68,6 +68,7 @@ export class ClubsService {
       .exec();
 
     if (!updated) throw new NotFoundException(`Club ${id} not found`);
+    
     try {
       if (this.neoSync) {
         await this.neoSync.upsertClub({ clubId: updated._id.toString(), clubName: updated.name });
@@ -95,7 +96,7 @@ export class ClubsService {
         await this.neoSync.removeClub({ clubId: id });
       }
     } catch {
-      // ignore
+      
     }
 
     return { success: true };
