@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Enrollment } from '@fitconnect/api';
-import { environment } from 'src/environments/environment';
+import { environment } from '../environment';
 
 @Injectable({ providedIn: 'root' })
 export class EnrollmentsService {

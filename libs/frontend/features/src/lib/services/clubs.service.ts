@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators';
 import { Club, Training } from '@fitconnect/api';
 import { CreateClubDto } from '@fitconnect/dto';
 import { TrainingsService } from '@fitconnect/frontend-features';
-import { environment } from 'src/environments/environment';
+import { environment } from '../environment';
 
 // Re-export for backward compatibility
 export type { Club };

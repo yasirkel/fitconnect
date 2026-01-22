@@ -37,6 +37,13 @@
             }
           ],
           "outputHashing": "all"
+        ,
+          "fileReplacements": [
+            {
+              "replace": "libs/frontend/features/src/lib/environment.ts",
+              "with": "libs/frontend/features/src/lib/environment.prod.ts"
+            }
+          ]
         },
         "development": {
           "optimization": false,

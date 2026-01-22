@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { AuthResponse, MeResponse } from '@fitconnect/api';
 import { BehaviorSubject } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { environment } from '../environment';
 
 
 @Injectable({ providedIn: 'root' })
