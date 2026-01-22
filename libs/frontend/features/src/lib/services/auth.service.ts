@@ -3,11 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { AuthResponse, MeResponse } from '@fitconnect/api';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly baseUrl = 'http://localhost:3333/api/auth';
+  private readonly baseUrl = `${environment.apiUrl}/auth`;
   private readonly tokenKey = 'token';
 
   // Observable om login status bij te houden

@@ -1,13 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Enrollment } from '@fitconnect/api';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class EnrollmentsService {
   private http = inject(HttpClient);
 
-  // gebruik dezelfde baseUrl-stijl als je andere services
-  private baseUrl = 'http://localhost:3333/api';
+  private baseUrl = environment.apiUrl;
 
   enroll(trainingId: string) {
     return this.http.post<Enrollment>(`${this.baseUrl}/enrollments`, {

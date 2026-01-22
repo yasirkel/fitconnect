@@ -6,6 +6,7 @@ import { map } from 'rxjs/operators';
 import { Club, Training } from '@fitconnect/api';
 import { CreateClubDto } from '@fitconnect/dto';
 import { TrainingsService } from '@fitconnect/frontend-features';
+import { environment } from 'src/environments/environment';
 
 // Re-export for backward compatibility
 export type { Club };
@@ -14,9 +15,7 @@ export type { Club };
 	providedIn: 'root',
 })
 export class ClubsService {
-	// Backend NestJS app listens on port 3333 by default in this workspace.
-	// Use explicit port to avoid confusion while developing locally.
-	private apiUrl = 'http://localhost:3333/api/clubs';
+	private apiUrl = `${environment.apiUrl}/clubs`;
 	private http = inject(HttpClient);
 	private trainingsService = inject(TrainingsService);
 

@@ -1,11 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Training } from '@fitconnect/api';
+import { environment } from 'src/environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class TrainingsService {
   private http = inject(HttpClient);
-  private baseUrl = 'http://localhost:3333/api';
+  private baseUrl = environment.apiUrl;
 
   /**
    * Get trainings for a specific club.
