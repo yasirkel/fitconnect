@@ -17,9 +17,16 @@ async function bootstrap() {
 
   // CORS zodat Angular mag praten met de API
   app.enableCors({
-    origin: 'http://localhost:4200',
+    origin: [
+      'http://localhost:4200',
+      'https://fitconnect-angular.azurewebsites.net',
+      'https://fitconnect-nestjs.azurewebsites.net',
+    ],
+    credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   });
+
 
   // Log incoming Authorization header for debugging auth issues
   app.use((req: any, _res: any, next: any) => {
